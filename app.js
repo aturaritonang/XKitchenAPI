@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 
 //Routers
 const userRouter = require('./api/routers/users');
+const categoryRouter = require('./api/routers/categories');
+const productRouter = require('./api/routers/products');
 
 mongoose.connect('mongodb://localhost:27017/XKitchen');
 mongoose.Promise = global.Promise;
@@ -24,6 +26,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/users', userRouter);
+app.use('/api/categories', categoryRouter);
+app.use('/api/products', productRouter);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
