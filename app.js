@@ -5,11 +5,15 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 //Routers
-const userRouter = require('./api/routers/users');
+const waiterRouter = require('./api/routers/waiters');
 const categoryRouter = require('./api/routers/categories');
 const productRouter = require('./api/routers/products');
+const tableRouter = require('./api/routers/tables');
+const reservationRouter = require('./api/routers/reservations');
+const orderRouter = require('./api/routers/orders');
 
-mongoose.connect('mongodb://localhost:27017/XKitchen');
+//mongoose.connect('mongodb://localhost:27017/XKitchen');
+mongoose.connect('mongodb://admin:admin1234@ds115749.mlab.com:15749/xkitchen');
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended : false}));
@@ -25,12 +29,15 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/api/users', userRouter);
+app.use('/api/waiters', waiterRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/products', productRouter);
+app.use('/api/tables', tableRouter);
+app.use('/api/reservations', reservationRouter);
+app.use('/api/orders', orderRouter);
 
 app.use((req, res, next) => {
-    const error = new Error('Not found');
+    const error = new Error('Not found!');
     error.status = 404;
     next(error);
 });

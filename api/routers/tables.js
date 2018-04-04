@@ -3,12 +3,11 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 //User Model
-const Product = require('../models/product');
+const Table = require('../models/table');
 
 //Get all
 router.get('/', (req, res, next) => {
-    Product.find()
-        .populate('category', 'initial name')
+    Table.find()
         .exec()
         .then(doc => {
             res.status(200).json(doc);
@@ -24,17 +23,14 @@ router.get('/', (req, res, next) => {
 
 //Insert
 router.post('/', (req, res, next) => {
-    const newProduct = new Product({
+    const newTable = new Table({
         _id : new mongoose.Types.ObjectId(),
-        category : req.body.category,
         code : req.body.code,
-        initial : req.body.initial,
-        name : req.body.name,
-        description : req.body.description,
-        price: req.body.price
-    });
+        seat : req.body.seat,
+        description : req.body.description
+        });
 
-    newProduct.save()
+        newTable.save()
         .then(result => {
             console.log(result);
             res.status(201).json(result);
@@ -50,8 +46,7 @@ router.post('/', (req, res, next) => {
 //Get by (id)
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    Product.findById(id)
-        //.populate('category', 'initial name')
+    Table.findById(id)
         .exec()
         .then(result => {
             console.log(result);
@@ -67,7 +62,12 @@ router.get('/:id', (req, res, next) => {
 
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    Product.update({ _id : id }, { $set: req.body })
+    // const updateOps = {};
+    // for(const ops of req.body){
+    //     updateOps[ops.propName] = ops.value;
+    // }
+
+    Table.update({ _id : id }, { $set: req.body })
         .exec()
         .then( result => {
             res.status(200).json(result);
@@ -82,7 +82,7 @@ router.patch('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
     const id = req.params.id;
-    Product.remove({ _id : id })
+    Table.remove({ _id : id })
         .exec()
         .then( result => {
             res.status(200).json(result);

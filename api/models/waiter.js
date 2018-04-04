@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = mongoose.Schema({
+const waiterSchema = mongoose.Schema({
     _id : mongoose.Schema.Types.ObjectId,
     userId : { type: String, required: true },
     password : { type: String, required: true },
@@ -9,4 +9,4 @@ const userSchema = mongoose.Schema({
     fullName : { type: String, required: true }
 });
 
-module.exports = mongoose.model('User', userSchema, 'users');
+module.exports = mongoose.model('Waiter', waiterSchema, 'waiters');

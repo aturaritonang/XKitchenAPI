@@ -3,11 +3,11 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 //User Model
-const User = require('../models/user');
+const Waiter = require('../models/waiter');
 
 //Get all
 router.get('/', (req, res, next) => {
-    User.find()
+    Waiter.find()
         .exec()
         .then(doc => {
             res.status(200).json(doc);
@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
 
 //Insert
 router.post('/', (req, res, next) => {
-    const newUser = new User({
+    const newWaiter = new Waiter({
         _id : new mongoose.Types.ObjectId(),
         userId : req.body.userId,
         password : req.body.password,
@@ -32,7 +32,7 @@ router.post('/', (req, res, next) => {
         fullName : req.body.fullName
     });
 
-    newUser.save()
+    newWaiter.save()
         .then(result => {
             console.log(result);
             res.status(201).json(result);
@@ -48,7 +48,7 @@ router.post('/', (req, res, next) => {
 //Get by (id)
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    User.findById(id)
+    Waiter.findById(id)
         .exec()
         .then(result => {
             console.log(result);
@@ -64,12 +64,16 @@ router.get('/:id', (req, res, next) => {
 
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    const updateOps = {};
-    for(const ops of req.body){
-        updateOps[ops.propName] = ops.value;
-    }
-
-    User.update({ _id : id }, { $set: updateOps })
+    // const updateOps = {};
+    // for(const ops of req.body){
+    //     updateOps[ops.propName] = ops.value;
+    // }
+    // console.log('---req.body---')
+    // console.log(req.body);
+    // console.log('---updateOps---')
+    // console.log(updateOps);
+    // console.log('-------')
+    Waiter.update({ _id : id }, { $set: req.body })
         .exec()
         .then( result => {
             res.status(200).json(result);
@@ -84,7 +88,7 @@ router.patch('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
     const id = req.params.id;
-    User.remove({ _id : id })
+    Waiter.remove({ _id : id })
         .exec()
         .then( result => {
             res.status(200).json(result);

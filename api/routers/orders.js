@@ -3,12 +3,11 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 //User Model
-const Product = require('../models/product');
+const Order = require('../models/order');
 
 //Get all
 router.get('/', (req, res, next) => {
-    Product.find()
-        .populate('category', 'initial name')
+    Order.find()
         .exec()
         .then(doc => {
             res.status(200).json(doc);
@@ -24,17 +23,15 @@ router.get('/', (req, res, next) => {
 
 //Insert
 router.post('/', (req, res, next) => {
-    const newProduct = new Product({
+    const newOrder = new Order({
         _id : new mongoose.Types.ObjectId(),
-        category : req.body.category,
-        code : req.body.code,
-        initial : req.body.initial,
-        name : req.body.name,
-        description : req.body.description,
-        price: req.body.price
+        reservation : req.body.reservationId,
+        product : req.body.productId,
+        waiter : req.body.waiterId,
+        quantity : req.body.quantity
     });
 
-    newProduct.save()
+    newOrder.save()
         .then(result => {
             console.log(result);
             res.status(201).json(result);
@@ -50,8 +47,7 @@ router.post('/', (req, res, next) => {
 //Get by (id)
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    Product.findById(id)
-        //.populate('category', 'initial name')
+    Order.findById(id)
         .exec()
         .then(result => {
             console.log(result);
@@ -67,7 +63,8 @@ router.get('/:id', (req, res, next) => {
 
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    Product.update({ _id : id }, { $set: req.body })
+    
+    Order.update({ _id : id }, { $set: req.body })
         .exec()
         .then( result => {
             res.status(200).json(result);
@@ -82,7 +79,7 @@ router.patch('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
     const id = req.params.id;
-    Product.remove({ _id : id })
+    Order.remove({ _id : id })
         .exec()
         .then( result => {
             res.status(200).json(result);
